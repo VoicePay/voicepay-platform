@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class VoicepayAuthConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'voicepay_auth'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "voicepay_auth"

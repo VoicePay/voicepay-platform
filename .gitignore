@@ -48,6 +48,11 @@ coverage.xml
 *.cover
 *.py.cover
 .hypothesis/
+
+# Demo and sample test files
+demo_test_example.py
+demo_utils.py
+sample.wav
 .pytest_cache/
 cover/
 
@@ -60,6 +65,38 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+*.pub
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.AppleDouble
+Thumbs.db
+
+# Local development artifacts
+audio_data/
+*.wav
+temp/
+tmp/
+uploads/
+
+# OS files
+.AppleDouble
+.DS_Store
+.LSOverride
+*.bak
+*.backup
 
 # Flask stuff:
 instance/
