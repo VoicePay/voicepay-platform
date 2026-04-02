@@ -1,12 +1,3 @@
-# from django.contrib import admin
-# from django.urls import path, include
-
-# urlpatterns = [
-#     # Your admin or other paths
-#     path('auth/', include('voicepay_auth.urls')),   # app endpoints
-#     path("v1/", include(('voicepay.api_urls', 'api'), namespace="v1")),  # Swagger/docs
-# ]
-
 from django.contrib import admin
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
