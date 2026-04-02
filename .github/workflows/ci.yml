@@ -14,6 +14,17 @@ jobs:
       - name: CI passed
         run: echo "Pipeline ran successfully"
 
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pip install yamllint
+
+      - name: Run yamllint
+        run: yamllint -c .yamllint .
+
   lint:
     runs-on: ubuntu-latest
     defaults:
