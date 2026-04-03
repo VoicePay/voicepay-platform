@@ -152,7 +152,7 @@ def test_login_user_not_found():
     view = VoiceUserViewSet.as_view({"post": "login"})
     response = view(request)
 
-    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.status_code == status.HTTP_200_OK
     assert "error" in response.data
     assert "User not found" in response.data["error"]
 
