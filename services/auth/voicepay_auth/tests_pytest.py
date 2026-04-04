@@ -1,4 +1,3 @@
-import io
 import numpy as np
 import pytest
 
@@ -13,7 +12,8 @@ from .api_views import VoiceUserViewSet
 
 @pytest.mark.django_db
 def test_voiceuser_serializer_create(monkeypatch):
-    # Mock soundfile.read, preprocess_wav and VoiceEncoder to avoid heavy audio processing
+    # Mock soundfile.read, preprocess_wav and VoiceEncoder
+    # to avoid heavy audio processing
     def fake_sf_read(bytestream):
         return (np.zeros(16000, dtype=np.float32), 16000)
 
@@ -71,6 +71,7 @@ def test_login_action_success(monkeypatch):
         last_name="Smith",
         voice_embedding=stored_embedding.tobytes(),
     )
+    _ = user
 
     # Patch soundfile.read to return a dummy waveform
     def fake_sf_read(bytestream):
@@ -168,6 +169,7 @@ def test_login_voice_mismatch(monkeypatch):
         password="test123",
         voice_embedding=user_embedding.tobytes(),
     )
+    _ = user
 
     # Return a different embedding (orthogonal = similarity near 0)
     different_embedding = np.zeros(256, dtype=np.float32)
