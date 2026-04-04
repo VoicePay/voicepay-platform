@@ -20,7 +20,7 @@ jobs:
         with:
           python-version: "3.13"
 
-      - run: pip install black flake8
+      - run: pip install black==23.9.1 flake8
 
       - run: black --check .
       - run: flake8 .
