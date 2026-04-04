@@ -27,9 +27,33 @@ GitHub Actions runs on every push and pull request to `dev` and `prod`. See [`.g
 The pipeline includes the following stages:
 
 - `build` — validates the pipeline runs successfully
+- `docker-build` — builds the Docker image for `services/auth`
 - `test` — runs pytest against `services/auth`
 - `lint` — checks code formatting with `black` and `flake8`
 - `yaml-lint` — validates all `.yml` / `.yaml` files with `yamllint`
+
+## Running Locally with Docker
+
+Make sure Docker Desktop is running, then:
+
+```bash
+cd services/auth
+cp .env.example .env  # update values as needed
+docker-compose up --build
+```
+
+The app will be available at `http://localhost:8000`.
+
+### Environment Variables
+
+Create a `.env` file in `services/auth/` based on `.env.example`:
+
+| Variable | Description |
+|---|---|
+| `DEBUG` | Django debug mode (`1` for local dev) |
+| `SECRET_KEY` | Django secret key |
+| `DJANGO_SETTINGS_MODULE` | Settings module path |
+| `DATABASE_URL` | PostgreSQL connection string |
 
 ## Logging
 

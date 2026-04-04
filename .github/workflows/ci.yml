@@ -14,6 +14,14 @@ jobs:
       - name: CI passed
         run: echo "Pipeline ran successfully"
 
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t voicepay-auth ./services/auth
+
   test:
     runs-on: ubuntu-latest
     defaults:
