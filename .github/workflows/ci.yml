@@ -7,52 +7,6 @@ on:
     branches: [dev, prod]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: CI passed
-        run: echo "Pipeline ran successfully"
-
-  docker-build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Docker image
-        run: docker build -t voicepay-auth ./services/auth
-
-  test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: services/auth
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.13"
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt pytest pytest-django
-
-      - name: Run tests
-        run: pytest
-
-  yaml-lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install yamllint
-        run: pip install yamllint
-
-      - name: Run yamllint
-        run: yamllint -c .yamllint .
-
   lint:
     runs-on: ubuntu-latest
     defaults:
@@ -62,16 +16,48 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
 
-      - name: Install linting tools
-        run: pip install black==23.9.1 flake8
+      - run: pip install black flake8
 
-      - name: Run black
-        run: black --check .
+      - run: black --check .
+      - run: flake8 .
 
-      - name: Run flake8
-        run: flake8 .
+  yaml-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: pip install yamllint
+      - run: yamllint -c .yamllint .
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [lint]
+
+    defaults:
+      run:
+        working-directory: services/auth
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - run: pip install -r requirements.txt pytest pytest-django
+      - run: pytest -v
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: [lint, test, yaml-lint]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t voicepay-auth:${{ github.sha }} ./services/auth
