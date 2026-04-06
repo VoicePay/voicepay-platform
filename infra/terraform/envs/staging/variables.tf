@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "environment" {
   description = "Deployment environment"
   type        = string
-  default     = "dev"
+  default     = "staging"
 }
 
 variable "subnet_ids" {
