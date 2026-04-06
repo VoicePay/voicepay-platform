@@ -6,6 +6,7 @@ This directory contains all infrastructure-as-code for the VoicePay platform usi
 
 ```
 terraform/
+├── bootstrap/             # One-time setup for remote state infrastructure
 ├── envs/                  # Environment-specific configurations
 │   ├── dev/               # Development environment
 │   ├── staging/           # Staging environment
@@ -21,6 +22,33 @@ terraform/
 - [Terraform](https://developer.hashicorp.com/terraform/install) >= 1.5.0
 - AWS CLI configured with appropriate credentials
 - IAM user with required permissions
+
+## Remote State
+
+Terraform state is stored remotely in AWS S3 with DynamoDB for state locking.
+
+| Resource | Name |
+|---|---|
+| S3 Bucket | `voicepay-terraform-state-<account-id>` |
+| DynamoDB Table | `voicepay-terraform-locks` |
+
+Each environment has its own isolated state file:
+
+| Environment | State Key |
+|---|---|
+| dev | `dev/terraform.tfstate` |
+| staging | `staging/terraform.tfstate` |
+| prod | `prod/terraform.tfstate` |
+
+### Bootstrap
+
+The S3 bucket and DynamoDB table are provisioned once using the `bootstrap` configuration. This only needs to be run once per AWS account:
+
+```bash
+cd bootstrap
+terraform init
+terraform apply -var="aws_account_id=<your-account-id>"
+```
 
 ## Usage
 
@@ -67,4 +95,4 @@ Each environment uses the following variables:
 
 - Never commit `.tfvars` files — they may contain sensitive values
 - State files (`*.tfstate`) are excluded from version control
-- Remote state backend (S3 + DynamoDB) will be configured in a future task
+- Remote state is stored in S3 with state locking via DynamoDB
