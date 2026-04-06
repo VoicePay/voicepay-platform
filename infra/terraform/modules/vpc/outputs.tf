@@ -1,4 +1,4 @@
 output "vpc_id" {
   description = "VPC ID"
-  value       = module.vpc.vpc_id
+  value       = aws_vpc.main.id
 }
