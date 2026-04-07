@@ -1,8 +1,13 @@
 module "vpc" {
-  source      = "../../modules/vpc"
-  environment = var.environment
-  aws_region  = var.aws_region
-  tags        = var.tags
+  source               = "../../modules/vpc"
+  environment          = var.environment
+  aws_region           = var.aws_region
+  vpc_cidr             = var.vpc_cidr
+  availability_zones   = var.availability_zones
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
+  enable_nat_gateway   = var.enable_nat_gateway
+  tags                 = var.tags
 }
 
 module "iam" {
