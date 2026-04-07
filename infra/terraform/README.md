@@ -80,7 +80,12 @@ terraform apply
 
 - `vpc` — Provisions a VPC with DNS support enabled
 - `eks` — Provisions an EKS cluster with the required IAM role
-- `iam` — Provisions application IAM roles with least privilege
+- `iam` — Provisions the following IAM roles with least privilege:
+  - `cicd` — GitHub Actions OIDC role scoped to ECR push on `voicepay-*` repositories
+  - `terraform` — Terraform execution role scoped to `us-east-1`
+  - `eks_cluster` — EKS control plane role using AWS managed `AmazonEKSClusterPolicy`
+  - `eks_node` — EKS worker node role with ECR read, CNI, and worker node policies
+  - `argocd` — IRSA-based role scoped to ECR pull on `voicepay-*` repositories
 
 ## Environment Variables
 

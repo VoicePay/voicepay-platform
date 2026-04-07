@@ -10,8 +10,30 @@ variable "environment" {
   default     = "dev"
 }
 
-variable "subnet_ids" {
-  description = "List of subnet IDs for EKS"
-  type        = list(string)
-  default     = []
+variable "aws_account_id" {
+  description = "AWS account ID"
+  type        = string
+  default     = "147177189510"
+}
+
+variable "github_org" {
+  description = "GitHub organisation name"
+  type        = string
+  default     = "VoicePay"
+}
+
+variable "github_repo" {
+  description = "GitHub repository name"
+  type        = string
+  default     = "voicepay-platform"
+}
+
+variable "github_oidc_provider_arn" {
+  description = "ARN of the GitHub OIDC provider"
+  type        = string
+
+  validation {
+    condition     = length(var.github_oidc_provider_arn) > 0
+    error_message = "github_oidc_provider_arn must be set before provisioning."
+  }
 }
