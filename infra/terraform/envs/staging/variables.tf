@@ -10,8 +10,13 @@ variable "environment" {
   default     = "staging"
 }
 
-variable "subnet_ids" {
-  description = "List of subnet IDs for EKS"
-  type        = list(string)
-  default     = []
+variable "tags" {
+  description = "Common tags applied to all resources"
+  type        = map(string)
+  default = {
+    Project     = "voicepay"
+    Environment = "staging"
+    Owner       = "platform-team"
+    ManagedBy   = "Terraform"
+  }
 }

@@ -6,10 +6,9 @@ resource "aws_eks_cluster" "main" {
     subnet_ids = var.subnet_ids
   }
 
-  tags = {
-    Name        = "voicepay-${var.environment}-eks"
-    Environment = var.environment
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-eks"
+  })
 }
 
 resource "aws_iam_role" "eks_cluster" {
@@ -24,6 +23,10 @@ resource "aws_iam_role" "eks_cluster" {
         Service = "eks.amazonaws.com"
       }
     }]
+  })
+
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-eks-role"
   })
 }
 

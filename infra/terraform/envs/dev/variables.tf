@@ -37,3 +37,14 @@ variable "github_oidc_provider_arn" {
     error_message = "github_oidc_provider_arn must be set before provisioning."
   }
 }
+
+variable "tags" {
+  description = "Common tags applied to all resources"
+  type        = map(string)
+  default = {
+    Project     = "voicepay"
+    Environment = "dev"
+    Owner       = "platform-team"
+    ManagedBy   = "Terraform"
+  }
+}
