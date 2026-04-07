@@ -76,6 +76,20 @@ Apply changes:
 terraform apply
 ```
 
+## Tagging Strategy
+
+All resources are tagged consistently using a `tags` variable of type `map(string)` defined in each environment and passed down to all modules via `merge(var.tags, {...})`.
+
+Standard tags applied to every resource:
+
+| Tag | Description | Example |
+|---|---|---|
+| `Project` | Project name | `voicepay` |
+| `Environment` | Deployment environment | `dev`, `staging`, `prod` |
+| `Owner` | Team responsible for the resource | `platform-team` |
+| `ManagedBy` | How the resource is managed | `Terraform` |
+| `Name` | Resource-specific name | `voicepay-dev-vpc` |
+
 ## Modules
 
 - `vpc` — Provisions a VPC with DNS support enabled

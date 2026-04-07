@@ -44,3 +44,9 @@ variable "eks_oidc_issuer" {
   type        = string
   default     = ""
 }
+
+variable "tags" {
+  description = "Common tags applied to all resources"
+  type        = map(string)
+  default     = {}
+}

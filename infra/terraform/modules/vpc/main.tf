@@ -3,8 +3,7 @@ resource "aws_vpc" "main" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  tags = {
-    Name        = "voicepay-${var.environment}-vpc"
-    Environment = var.environment
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-vpc"
+  })
 }

@@ -19,11 +19,9 @@ resource "aws_iam_role" "cicd" {
     }]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-cicd-role"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-cicd-role"
+  })
 }
 
 resource "aws_iam_policy" "cicd" {
@@ -56,11 +54,9 @@ resource "aws_iam_policy" "cicd" {
     ]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-cicd-policy"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-cicd-policy"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "cicd" {
@@ -84,11 +80,9 @@ resource "aws_iam_role" "terraform" {
     }]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-terraform-role"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-terraform-role"
+  })
 }
 
 resource "aws_iam_policy" "terraform" {
@@ -119,11 +113,9 @@ resource "aws_iam_policy" "terraform" {
     ]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-terraform-policy"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-terraform-policy"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "terraform" {
@@ -147,11 +139,9 @@ resource "aws_iam_role" "eks_cluster" {
     }]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-eks-cluster-role"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-eks-cluster-role"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
@@ -175,11 +165,9 @@ resource "aws_iam_role" "eks_node" {
     }]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-eks-node-role"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-eks-node-role"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "eks_node_policy" {
@@ -218,11 +206,9 @@ resource "aws_iam_role" "argocd" {
     }]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-argocd-role"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-argocd-role"
+  })
 }
 
 resource "aws_iam_policy" "argocd" {
@@ -251,11 +237,9 @@ resource "aws_iam_policy" "argocd" {
     ]
   })
 
-  tags = {
-    Name        = "voicepay-${var.environment}-argocd-policy"
-    Environment = var.environment
-    ManagedBy   = "Terraform"
-  }
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-argocd-policy"
+  })
 }
 
 resource "aws_iam_role_policy_attachment" "argocd" {
