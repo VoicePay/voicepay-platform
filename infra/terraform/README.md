@@ -92,7 +92,11 @@ Standard tags applied to every resource:
 
 ## Modules
 
-- `vpc` — Provisions a VPC with DNS support enabled
+- `vpc` — Provisions a VPC with public and private subnets, internet gateway, route tables, and optional NAT gateway. Key variables:
+  - `vpc_cidr` — configurable CIDR block (default `10.0.0.0/16`)
+  - `availability_zones` — list of AZs to deploy subnets into
+  - `public_subnet_cidrs` / `private_subnet_cidrs` — configurable subnet CIDRs
+  - `enable_nat_gateway` — toggle NAT gateway on/off (disabled by default in dev for cost optimization)
 - `eks` — Provisions an EKS cluster with the required IAM role
 - `iam` — Provisions the following IAM roles with least privilege:
   - `cicd` — GitHub Actions OIDC role scoped to ECR push on `voicepay-*` repositories
