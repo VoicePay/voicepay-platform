@@ -97,6 +97,10 @@ Standard tags applied to every resource:
   - `availability_zones` — list of AZs to deploy subnets into
   - `public_subnet_cidrs` / `private_subnet_cidrs` — configurable subnet CIDRs
   - `enable_nat_gateway` — toggle NAT gateway on/off (disabled by default in dev for cost optimization)
+- `ecr` — Provisions ECR repositories with lifecycle policies and image scanning. Key variables:
+  - `repository_names` — list of repositories to create (default: `auth`, `payment`, `notification`)
+  - `image_retention_count` — number of images to retain per repository (default: `3`)
+  - `image_tag_mutability` — `MUTABLE` in dev, `IMMUTABLE` in prod to prevent tag overwriting
 - `eks` — Provisions an EKS cluster with a managed node group and OIDC provider for IRSA. Key variables:
   - `kubernetes_version` — configurable Kubernetes version (default `1.29`)
   - `cluster_role_arn` / `node_role_arn` — IAM roles passed from the IAM module

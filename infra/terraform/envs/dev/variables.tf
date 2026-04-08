@@ -79,6 +79,24 @@ variable "tags" {
   }
 }
 
+variable "ecr_repository_names" {
+  description = "List of ECR repository names"
+  type        = list(string)
+  default     = ["auth", "payment", "notification"]
+}
+
+variable "ecr_image_retention_count" {
+  description = "Number of images to retain per ECR repository"
+  type        = number
+  default     = 3
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "Image tag mutability — MUTABLE in dev, IMMUTABLE in prod"
+  type        = string
+  default     = "MUTABLE"
+}
+
 variable "node_instance_types" {
   description = "EC2 instance types for EKS node group"
   type        = list(string)

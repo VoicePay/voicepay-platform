@@ -21,6 +21,14 @@ module "iam" {
   tags                     = var.tags
 }
 
+module "ecr" {
+  source                = "../../modules/ecr"
+  repository_names      = var.ecr_repository_names
+  image_retention_count = var.ecr_image_retention_count
+  image_tag_mutability  = var.ecr_image_tag_mutability
+  tags                  = var.tags
+}
+
 module "eks" {
   source              = "../../modules/eks"
   environment         = var.environment
