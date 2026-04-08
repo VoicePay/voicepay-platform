@@ -20,3 +20,17 @@ module "iam" {
   github_oidc_provider_arn = var.github_oidc_provider_arn
   tags                     = var.tags
 }
+
+module "eks" {
+  source              = "../../modules/eks"
+  environment         = var.environment
+  cluster_role_arn    = module.iam.eks_cluster_role_arn
+  node_role_arn       = module.iam.eks_node_role_arn
+  vpc_id              = module.vpc.vpc_id
+  subnet_ids          = module.vpc.private_subnet_ids
+  node_instance_types = var.node_instance_types
+  node_desired_size   = var.node_desired_size
+  node_min_size       = var.node_min_size
+  node_max_size       = var.node_max_size
+  tags                = var.tags
+}

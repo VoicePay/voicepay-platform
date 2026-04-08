@@ -7,3 +7,23 @@ output "cluster_endpoint" {
   description = "EKS cluster endpoint"
   value       = aws_eks_cluster.main.endpoint
 }
+
+output "cluster_ca_certificate" {
+  description = "EKS cluster certificate authority data"
+  value       = aws_eks_cluster.main.certificate_authority[0].data
+}
+
+output "oidc_provider_arn" {
+  description = "OIDC provider ARN for IRSA"
+  value       = aws_iam_openid_connect_provider.eks.arn
+}
+
+output "oidc_issuer" {
+  description = "OIDC issuer URL"
+  value       = aws_eks_cluster.main.identity[0].oidc[0].issuer
+}
+
+output "kubeconfig_command" {
+  description = "Command to update kubeconfig for kubectl access"
+  value       = "aws eks update-kubeconfig --region ${var.tags["Environment"] != "" ? "us-east-1" : "us-east-1"} --name ${aws_eks_cluster.main.name}"
+}

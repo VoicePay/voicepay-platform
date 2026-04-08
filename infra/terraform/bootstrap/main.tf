@@ -1,10 +1,6 @@
 resource "aws_s3_bucket" "terraform_state" {
   bucket = "voicepay-terraform-state-${var.aws_account_id}"
 
-  lifecycle {
-    prevent_destroy = true
-  }
-
   tags = {
     Name        = "voicepay-terraform-state"
     Purpose     = "Terraform remote state storage"
@@ -67,10 +63,6 @@ resource "aws_dynamodb_table" "terraform_locks" {
   attribute {
     name = "LockID"
     type = "S"
-  }
-
-  lifecycle {
-    prevent_destroy = true
   }
 
   tags = {

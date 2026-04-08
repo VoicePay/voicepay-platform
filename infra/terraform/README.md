@@ -97,7 +97,12 @@ Standard tags applied to every resource:
   - `availability_zones` — list of AZs to deploy subnets into
   - `public_subnet_cidrs` / `private_subnet_cidrs` — configurable subnet CIDRs
   - `enable_nat_gateway` — toggle NAT gateway on/off (disabled by default in dev for cost optimization)
-- `eks` — Provisions an EKS cluster with the required IAM role
+- `eks` — Provisions an EKS cluster with a managed node group and OIDC provider for IRSA. Key variables:
+  - `kubernetes_version` — configurable Kubernetes version (default `1.29`)
+  - `cluster_role_arn` / `node_role_arn` — IAM roles passed from the IAM module
+  - `subnet_ids` — private subnet IDs passed from the VPC module
+  - `node_instance_types` — configurable EC2 instance types (default `t3.medium`)
+  - `node_desired_size` / `node_min_size` / `node_max_size` — configurable node scaling
 - `iam` — Provisions the following IAM roles with least privilege:
   - `cicd` — GitHub Actions OIDC role scoped to ECR push on `voicepay-*` repositories
   - `terraform` — Terraform execution role scoped to `us-east-1`
