@@ -23,7 +23,7 @@ This directory provisions the foundational AWS resources required for Terraform 
 
 > ⚠️ The bootstrap state is stored **locally**. This is an intentional trade-off — the bootstrap provisions the very infrastructure needed for remote state, so it cannot use remote state itself. The local state file (`terraform.tfstate`) should be kept safe and never committed to version control.
 
-> ⚠️ The S3 bucket and DynamoDB table have `prevent_destroy = true` set. This prevents accidental deletion via `terraform destroy`. To destroy these resources, you must first remove the lifecycle block.
+> ⚠️ `prevent_destroy` has been removed during the testing phase to allow easy cleanup. It should be re-added before production use.
 
 ## Usage
 
