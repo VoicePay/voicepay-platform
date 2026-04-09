@@ -23,6 +23,19 @@ terraform/
 - AWS CLI configured with appropriate credentials
 - IAM user with required permissions
 
+## Environment Configuration
+
+Each environment is isolated with its own state file and environment-specific variables while sharing the same module structure.
+
+| Configuration | dev | staging | prod |
+|---|---|---|---|
+| VPC CIDR | `10.0.0.0/16` | `10.1.0.0/16` | `10.2.0.0/16` |
+| Availability Zones | 2 | 2 | 3 |
+| NAT Gateway | ❌ | ✅ | ✅ |
+| Node Instance Type | `t3.medium` | `t3.medium` | `t3.large` |
+| Node Desired Count | 2 | 2 | 3 |
+| Image Tag Mutability | `MUTABLE` | `MUTABLE` | `IMMUTABLE` |
+
 ## Remote State
 
 Terraform state is stored remotely in AWS S3 with DynamoDB for state locking.
