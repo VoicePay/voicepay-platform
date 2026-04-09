@@ -25,5 +25,5 @@ output "oidc_issuer" {
 
 output "kubeconfig_command" {
   description = "Command to update kubeconfig for kubectl access"
-  value       = "aws eks update-kubeconfig --region ${var.tags["Environment"] != "" ? "us-east-1" : "us-east-1"} --name ${aws_eks_cluster.main.name}"
+  value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${aws_eks_cluster.main.name}"
 }
