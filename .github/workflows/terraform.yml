@@ -5,10 +5,12 @@ on:
     branches: [dev, staging, prod]
     paths:
       - "infra/terraform/**"
+      - ".github/workflows/terraform*.yml"
   push:
     branches: [dev, staging, prod]
     paths:
       - "infra/terraform/**"
+      - ".github/workflows/terraform*.yml"
   workflow_dispatch:
     inputs:
       environment:
@@ -36,7 +38,7 @@ jobs:
           - environment: prod
             working_directory: infra/terraform/envs/prod
             auto_apply: false
-    uses: ./.github/workflows/infra-terraform-reusable.yml
+    uses: ./.github/workflows/terraform-reusable.yml
     with:
       environment: ${{ matrix.environment }}
       working_directory: ${{ matrix.working_directory }}
