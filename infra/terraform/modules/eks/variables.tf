@@ -3,6 +3,11 @@ variable "environment" {
   type        = string
 }
 
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
+
 variable "kubernetes_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
