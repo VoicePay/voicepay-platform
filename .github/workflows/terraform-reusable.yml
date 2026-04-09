@@ -25,6 +25,8 @@ on:
         required: true
       GITHUB_OIDC_PROVIDER_ARN:
         required: true
+      AWS_ACCOUNT_ID:
+        required: true
 
 jobs:
   terraform:
@@ -50,6 +52,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+
+      - name: Terraform Bootstrap
+        run: |
+          cd infra/terraform/bootstrap
+          terraform init
+          terraform apply -var="aws_account_id=${{ secrets.AWS_ACCOUNT_ID }}" -auto-approve
+        working-directory: ${{ github.workspace }}
 
       - name: Terraform Init
         run: terraform init
