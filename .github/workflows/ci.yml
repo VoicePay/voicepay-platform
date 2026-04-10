@@ -52,26 +52,12 @@ jobs:
       - run: pip install -r requirements.txt pytest pytest-django
       - run: pytest -v
 
-  docker-push:
+  docker-build:
     runs-on: ubuntu-latest
     needs: [lint, test, yaml-lint]
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v2
-
-      - name: Build, tag, and push image
-        run: |
-          IMAGE_URI=${{ secrets.ECR_REGISTRY }}/voicepay-auth
-          docker build -t $IMAGE_URI:${{ github.sha }} -t $IMAGE_URI:latest ./services/auth
-          docker push $IMAGE_URI:${{ github.sha }}
-          docker push $IMAGE_URI:latest
+      - name: Build Docker image
+        run: docker build -t voicepay-auth:${{ github.sha }} ./services/auth
