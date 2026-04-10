@@ -21,6 +21,15 @@ on:
           - dev
           - staging
           - prod
+      action:
+        description: "Action to perform"
+        required: true
+        type: choice
+        default: plan
+        options:
+          - plan
+          - apply
+          - destroy
 
 jobs:
   terraform:
@@ -47,7 +56,11 @@ jobs:
       working_directory: ${{ matrix.working_directory }}
       apply: >-
         ${{ (github.event_name == 'push' && matrix.auto_apply == true) ||
-        (github.event_name == 'workflow_dispatch' && inputs.environment == matrix.environment) }}
+        (github.event_name == 'workflow_dispatch' &&
+        inputs.environment == matrix.environment && inputs.action == 'apply') }}
+      destroy: >-
+        ${{ github.event_name == 'workflow_dispatch' &&
+        inputs.environment == matrix.environment && inputs.action == 'destroy' }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

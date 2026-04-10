@@ -16,6 +16,11 @@ on:
         required: false
         type: boolean
         default: false
+      destroy:
+        description: "Whether to run terraform destroy"
+        required: false
+        type: boolean
+        default: false
     secrets:
       AWS_ACCESS_KEY_ID:
         required: true
@@ -111,3 +116,10 @@ jobs:
           terraform apply \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
             -auto-approve tfplan
+
+      - name: Terraform Destroy
+        if: inputs.destroy == true
+        run: |
+          terraform destroy \
+            -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
+            -auto-approve
