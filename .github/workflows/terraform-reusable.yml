@@ -23,7 +23,7 @@ on:
         required: true
       AWS_DEFAULT_REGION:
         required: true
-      GITHUB_OIDC_PROVIDER_ARN:
+      TF_GITHUB_OIDC_PROVIDER_ARN:
         required: true
       AWS_ACCOUNT_ID:
         required: true
@@ -80,7 +80,7 @@ jobs:
         id: plan
         run: |
           terraform plan \
-            -var="github_oidc_provider_arn=${{ secrets.GITHUB_OIDC_PROVIDER_ARN }}" \
+            -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
             -out=tfplan \
             -no-color 2>&1 | tee plan_output.txt
 
@@ -110,5 +110,5 @@ jobs:
         if: inputs.apply == true
         run: |
           terraform apply \
-            -var="github_oidc_provider_arn=${{ secrets.GITHUB_OIDC_PROVIDER_ARN }}" \
+            -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
             -auto-approve tfplan
