@@ -33,6 +33,7 @@ module "eks" {
   source              = "../../modules/eks"
   environment         = var.environment
   aws_region          = var.aws_region
+  kubernetes_version  = var.kubernetes_version
   cluster_role_arn    = module.iam.eks_cluster_role_arn
   node_role_arn       = module.iam.eks_node_role_arn
   vpc_id              = module.vpc.vpc_id

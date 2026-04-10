@@ -88,6 +88,12 @@ variable "node_instance_types" {
   default     = ["t3.medium"]
 }
 
+variable "kubernetes_version" {
+  description = "Kubernetes version for EKS cluster"
+  type        = string
+  default     = "1.29"
+}
+
 variable "node_desired_size" {
   description = "Desired number of worker nodes"
   type        = number
