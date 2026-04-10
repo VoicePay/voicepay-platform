@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "environment" {
   description = "Deployment environment"
   type        = string
-  default     = "prod"
+  default     = "staging"
 }
 
 variable "aws_account_id" {
@@ -37,25 +37,25 @@ variable "github_oidc_provider_arn" {
 variable "vpc_cidr" {
   description = "CIDR block for the VPC"
   type        = string
-  default     = "10.2.0.0/16"
+  default     = "10.1.0.0/16"
 }
 
 variable "availability_zones" {
   description = "List of availability zones"
   type        = list(string)
-  default     = ["us-east-1a", "us-east-1b", "us-east-1c"]
+  default     = ["us-east-1a", "us-east-1b"]
 }
 
 variable "public_subnet_cidrs" {
   description = "CIDR blocks for public subnets"
   type        = list(string)
-  default     = ["10.2.1.0/24", "10.2.2.0/24", "10.2.3.0/24"]
+  default     = ["10.1.1.0/24", "10.1.2.0/24"]
 }
 
 variable "private_subnet_cidrs" {
   description = "CIDR blocks for private subnets"
   type        = list(string)
-  default     = ["10.2.4.0/24", "10.2.5.0/24", "10.2.6.0/24"]
+  default     = ["10.1.3.0/24", "10.1.4.0/24"]
 }
 
 variable "enable_nat_gateway" {
@@ -77,33 +77,33 @@ variable "ecr_image_retention_count" {
 }
 
 variable "ecr_image_tag_mutability" {
-  description = "Image tag mutability — IMMUTABLE in prod to prevent tag overwriting"
+  description = "Image tag mutability"
   type        = string
-  default     = "IMMUTABLE"
+  default     = "MUTABLE"
 }
 
 variable "node_instance_types" {
   description = "EC2 instance types for EKS node group"
   type        = list(string)
-  default     = ["t3.large"]
+  default     = ["t3.medium"]
 }
 
 variable "node_desired_size" {
   description = "Desired number of worker nodes"
   type        = number
-  default     = 3
+  default     = 2
 }
 
 variable "node_min_size" {
   description = "Minimum number of worker nodes"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "node_max_size" {
   description = "Maximum number of worker nodes"
   type        = number
-  default     = 6
+  default     = 4
 }
 
 variable "tags" {
@@ -111,7 +111,7 @@ variable "tags" {
   type        = map(string)
   default = {
     Project     = "voicepay"
-    Environment = "prod"
+    Environment = "staging"
     Owner       = "platform-team"
     ManagedBy   = "Terraform"
   }
