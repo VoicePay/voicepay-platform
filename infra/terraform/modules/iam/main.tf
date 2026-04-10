@@ -1,5 +1,6 @@
 # CI/CD Role — used by GitHub Actions to push images to ECR
 resource "aws_iam_role" "cicd" {
+  count       = var.github_oidc_provider_arn != "" ? 1 : 0
   name        = "voicepay-${var.environment}-cicd-role"
   description = "Role assumed by GitHub Actions for CI/CD pipeline"
 
@@ -25,6 +26,7 @@ resource "aws_iam_role" "cicd" {
 }
 
 resource "aws_iam_policy" "cicd" {
+  count       = var.github_oidc_provider_arn != "" ? 1 : 0
   name        = "voicepay-${var.environment}-cicd-policy"
   description = "Least privilege policy for CI/CD — ECR push only"
 
@@ -60,8 +62,9 @@ resource "aws_iam_policy" "cicd" {
 }
 
 resource "aws_iam_role_policy_attachment" "cicd" {
-  role       = aws_iam_role.cicd.name
-  policy_arn = aws_iam_policy.cicd.arn
+  count      = var.github_oidc_provider_arn != "" ? 1 : 0
+  role       = aws_iam_role.cicd[0].name
+  policy_arn = aws_iam_policy.cicd[0].arn
 }
 
 # Terraform Execution Role — used to provision infrastructure
@@ -187,6 +190,7 @@ resource "aws_iam_role_policy_attachment" "eks_ecr_policy" {
 
 # ArgoCD Role — used by ArgoCD to deploy to EKS (future)
 resource "aws_iam_role" "argocd" {
+  count       = var.eks_oidc_provider_arn != "" ? 1 : 0
   name        = "voicepay-${var.environment}-argocd-role"
   description = "Role assumed by ArgoCD via IRSA for ECR access"
 
@@ -212,6 +216,7 @@ resource "aws_iam_role" "argocd" {
 }
 
 resource "aws_iam_policy" "argocd" {
+  count       = var.eks_oidc_provider_arn != "" ? 1 : 0
   name        = "voicepay-${var.environment}-argocd-policy"
   description = "Least privilege policy for ArgoCD to pull images from ECR"
 
@@ -243,6 +248,7 @@ resource "aws_iam_policy" "argocd" {
 }
 
 resource "aws_iam_role_policy_attachment" "argocd" {
-  role       = aws_iam_role.argocd.name
-  policy_arn = aws_iam_policy.argocd.arn
+  count      = var.eks_oidc_provider_arn != "" ? 1 : 0
+  role       = aws_iam_role.argocd[0].name
+  policy_arn = aws_iam_policy.argocd[0].arn
 }
