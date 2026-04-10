@@ -14,6 +14,7 @@ terraform/
 └── modules/               # Reusable Terraform modules
     ├── vpc/               # VPC and networking
     ├── eks/               # EKS cluster
+    ├── ecr/               # Container registries
     └── iam/               # IAM roles and policies
 ```
 
@@ -23,6 +24,52 @@ terraform/
 - AWS CLI configured with appropriate credentials
 - IAM user with required permissions
 
+## Usage
+
+Navigate to the environment you want to work with:
+
+```bash
+cd envs/dev
+```
+
+Initialize Terraform:
+
+```bash
+terraform init
+```
+
+Preview changes:
+
+```bash
+terraform plan
+```
+
+Apply changes:
+
+```bash
+terraform apply
+```
+
+## CI/CD
+
+Terraform changes are validated and deployed via GitHub Actions. See [`.github/workflows/terraform.yml`](../../../.github/workflows/terraform.yml).
+
+On every pull request to `dev`, `staging`, or `prod`:
+- `terraform init` — initializes the backend and modules
+- `terraform fmt -check` — validates formatting
+- `terraform validate` — checks configuration is valid
+- `terraform plan` — shows what will change, posted as a PR comment
+
+On merge:
+- `staging` — automatically applies
+- `dev` and `prod` — require manual trigger via `workflow_dispatch`
+
+### Manual Trigger
+
+Go to **GitHub Actions → Terraform → Run workflow** and select:
+- **Environment** — `dev`, `staging`, or `prod`
+- **Action** — `plan`, `apply`, or `destroy`
+
 ## Environment Configuration
 
 Each environment is isolated with its own state file and environment-specific variables while sharing the same module structure.
@@ -31,7 +78,7 @@ Each environment is isolated with its own state file and environment-specific va
 |---|---|---|---|
 | VPC CIDR | `10.0.0.0/16` | `10.1.0.0/16` | `10.2.0.0/16` |
 | Availability Zones | 2 | 2 | 3 |
-| NAT Gateway | ❌ | ✅ | ✅ |
+| NAT Gateway | Disabled | Enabled | Enabled |
 | Node Instance Type | `t3.medium` | `t3.medium` | `t3.large` |
 | Node Desired Count | 2 | 2 | 3 |
 | Image Tag Mutability | `MUTABLE` | `MUTABLE` | `IMMUTABLE` |
@@ -61,32 +108,6 @@ The S3 bucket and DynamoDB table are provisioned once using the `bootstrap` conf
 cd bootstrap
 terraform init
 terraform apply -var="aws_account_id=<your-account-id>"
-```
-
-## Usage
-
-Navigate to the environment you want to work with:
-
-```bash
-cd envs/dev
-```
-
-Initialize Terraform:
-
-```bash
-terraform init
-```
-
-Preview changes:
-
-```bash
-terraform plan
-```
-
-Apply changes:
-
-```bash
-terraform apply
 ```
 
 ## Tagging Strategy
