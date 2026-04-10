@@ -88,7 +88,13 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            const plan = fs.readFileSync('${{ inputs.working_directory }}/plan_output.txt', 'utf8');
+            const path = require('path');
+            const planPath = path.join(
+              process.env.GITHUB_WORKSPACE,
+              '${{ inputs.working_directory }}',
+              'plan_output.txt'
+            );
+            const plan = fs.readFileSync(planPath, 'utf8');
             const truncated = plan.length > 60000 ? plan.substring(0, 60000) + '\n... truncated' : plan;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
