@@ -26,11 +26,7 @@ variable "github_repo" {
 variable "github_oidc_provider_arn" {
   description = "ARN of the GitHub OIDC provider for CI/CD role"
   type        = string
-
-  validation {
-    condition     = length(var.github_oidc_provider_arn) > 0
-    error_message = "github_oidc_provider_arn must be set before provisioning."
-  }
+  default     = ""
 }
 
 variable "eks_oidc_provider_arn" {
