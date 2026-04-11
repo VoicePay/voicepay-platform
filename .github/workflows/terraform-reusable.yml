@@ -32,7 +32,7 @@ on:
         required: true
       AWS_ACCOUNT_ID:
         required: true
-      TF_EKS_PUBLIC_CIDRS:
+      EKS_PUBLIC_CIDRS:
         required: false
 
 jobs:
@@ -100,7 +100,7 @@ jobs:
         run: |
           terraform plan \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.TF_EKS_PUBLIC_CIDRS }}"]' \
+            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
             -out=tfplan \
             -no-color 2>&1 | tee plan_output.txt
 
@@ -130,7 +130,7 @@ jobs:
         run: |
           terraform apply \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.TF_EKS_PUBLIC_CIDRS }}"]' \
+            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
             -auto-approve tfplan
 
       - name: Terraform Destroy
@@ -138,5 +138,5 @@ jobs:
         run: |
           terraform destroy \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.TF_EKS_PUBLIC_CIDRS }}"]' \
+            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
             -auto-approve
