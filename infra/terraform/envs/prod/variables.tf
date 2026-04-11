@@ -88,6 +88,18 @@ variable "node_instance_types" {
   default     = ["t3.large"]
 }
 
+variable "endpoint_public_access" {
+  description = "Whether to enable public access to the EKS API server"
+  type        = bool
+  default     = false
+}
+
+variable "public_access_cidrs" {
+  description = "CIDRs allowed to access the EKS public endpoint"
+  type        = list(string)
+  default     = []
+}
+
 variable "node_desired_size" {
   description = "Desired number of worker nodes"
   type        = number

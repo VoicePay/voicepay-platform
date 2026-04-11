@@ -88,10 +88,22 @@ variable "node_instance_types" {
   default     = ["t3.medium"]
 }
 
+variable "endpoint_public_access" {
+  description = "Whether to enable public access to the EKS API server"
+  type        = bool
+  default     = true
+}
+
+variable "public_access_cidrs" {
+  description = "CIDRs allowed to access the EKS public endpoint"
+  type        = list(string)
+  default     = []
+}
+
 variable "kubernetes_version" {
   description = "Kubernetes version for EKS cluster"
   type        = string
-  default     = "1.29"
+  default     = "1.30"
 }
 
 variable "node_desired_size" {

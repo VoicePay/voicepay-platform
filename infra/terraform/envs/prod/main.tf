@@ -30,16 +30,18 @@ module "ecr" {
 }
 
 module "eks" {
-  source              = "../../modules/eks"
-  environment         = var.environment
-  aws_region          = var.aws_region
-  cluster_role_arn    = module.iam.eks_cluster_role_arn
-  node_role_arn       = module.iam.eks_node_role_arn
-  vpc_id              = module.vpc.vpc_id
-  subnet_ids          = module.vpc.private_subnet_ids
-  node_instance_types = var.node_instance_types
-  node_desired_size   = var.node_desired_size
-  node_min_size       = var.node_min_size
-  node_max_size       = var.node_max_size
-  tags                = var.tags
+  source                = "../../modules/eks"
+  environment           = var.environment
+  aws_region            = var.aws_region
+  cluster_role_arn      = module.iam.eks_cluster_role_arn
+  node_role_arn         = module.iam.eks_node_role_arn
+  vpc_id                = module.vpc.vpc_id
+  subnet_ids            = module.vpc.private_subnet_ids
+  node_instance_types   = var.node_instance_types
+  node_desired_size     = var.node_desired_size
+  node_min_size         = var.node_min_size
+  node_max_size         = var.node_max_size
+  endpoint_public_access = var.endpoint_public_access
+  public_access_cidrs   = var.public_access_cidrs
+  tags                  = var.tags
 }

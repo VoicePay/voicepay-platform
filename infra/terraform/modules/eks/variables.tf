@@ -58,6 +58,18 @@ variable "node_max_size" {
   default     = 3
 }
 
+variable "endpoint_public_access" {
+  description = "Whether to enable public access to the EKS API server endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "public_access_cidrs" {
+  description = "List of CIDRs that can access the EKS public endpoint"
+  type        = list(string)
+  default     = []
+}
+
 variable "tags" {
   description = "Common tags applied to all resources"
   type        = map(string)

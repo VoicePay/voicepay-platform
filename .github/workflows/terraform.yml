@@ -67,3 +67,4 @@ jobs:
       AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
       TF_GITHUB_OIDC_PROVIDER_ARN: ${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}
       AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+      TF_EKS_PUBLIC_CIDRS: ${{ secrets.TF_EKS_PUBLIC_CIDRS }}
