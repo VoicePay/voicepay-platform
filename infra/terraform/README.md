@@ -58,6 +58,8 @@ On every pull request to `dev`, `staging`, or `prod`:
 - `terraform init` — initializes the backend and modules
 - `terraform fmt -check` — validates formatting
 - `terraform validate` — checks configuration is valid
+- `tflint` — lints Terraform code for best practice violations
+- `tfsec` — scans for security misconfigurations, fails on critical issues
 - `terraform plan` — shows what will change, posted as a PR comment
 
 On merge:

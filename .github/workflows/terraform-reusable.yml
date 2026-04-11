@@ -81,6 +81,18 @@ jobs:
       - name: Terraform Validate
         run: terraform validate
 
+      - name: Run tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          tflint --init
+          tflint --recursive
+
+      - name: Run tfsec
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ${{ inputs.working_directory }}
+          soft_fail: false
+
       - name: Terraform Plan
         id: plan
         run: |
