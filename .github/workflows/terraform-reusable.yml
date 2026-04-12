@@ -95,12 +95,25 @@ jobs:
           working_directory: ${{ inputs.working_directory }}
           soft_fail: false
 
+      - name: Prepare public access CIDRs
+        run: |
+          if [ -z "${EKS_PUBLIC_CIDRS:-}" ]; then
+            echo "Warning: EKS_PUBLIC_CIDRS not set, using empty list"
+            echo "PUBLIC_ACCESS_CIDRS=[]" >> $GITHUB_ENV
+          else
+            if echo "${EKS_PUBLIC_CIDRS}" | grep -Eq '^\[.*\]$'; then
+              echo "PUBLIC_ACCESS_CIDRS=${EKS_PUBLIC_CIDRS}" >> $GITHUB_ENV
+            else
+              echo "PUBLIC_ACCESS_CIDRS=[\"${EKS_PUBLIC_CIDRS}\"]" >> $GITHUB_ENV
+            fi
+          fi
+
       - name: Terraform Plan
         id: plan
         run: |
           terraform plan \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
+            -var='public_access_cidrs='"$PUBLIC_ACCESS_CIDRS" \
             -out=tfplan \
             -no-color 2>&1 | tee plan_output.txt
 
@@ -128,15 +141,12 @@ jobs:
       - name: Terraform Apply
         if: inputs.apply == true
         run: |
-          terraform apply \
-            -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
-            -auto-approve tfplan
+          terraform apply -auto-approve tfplan
 
       - name: Terraform Destroy
         if: inputs.destroy == true
         run: |
           terraform destroy \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs=["${{ secrets.EKS_PUBLIC_CIDRS }}"]' \
+            -var='public_access_cidrs='"$PUBLIC_ACCESS_CIDRS" \
             -auto-approve
