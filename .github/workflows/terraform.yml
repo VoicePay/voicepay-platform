@@ -46,7 +46,7 @@ jobs:
             auto_apply: false
           - environment: staging
             working_directory: infra/terraform/envs/staging
-            auto_apply: true
+            auto_apply: false
           - environment: prod
             working_directory: infra/terraform/envs/prod
             auto_apply: false
