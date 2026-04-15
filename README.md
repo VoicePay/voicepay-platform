@@ -15,6 +15,8 @@ voicepay-platform/
     ├── kubernetes/      # Kubernetes manifests
     │   ├── base/
     │   └── overlays/
+    ├── monitoring/      # Observability configs
+    │   └── prometheus/  # Prometheus config and alerting rules
     └── terraform/       # Terraform IaC
         ├── envs/
         └── modules/
@@ -43,6 +45,7 @@ docker-compose up --build
 ```
 
 The app will be available at `http://localhost:8000`.
+Prometheus UI will be available at `http://localhost:9090`.
 
 ### Environment Variables
 
@@ -54,6 +57,17 @@ Create a `.env` file in `services/auth/` based on `.env.example`:
 | `SECRET_KEY` | Django secret key |
 | `DJANGO_SETTINGS_MODULE` | Settings module path |
 | `DATABASE_URL` | PostgreSQL connection string |
+| `ALLOWED_HOSTS` | Comma-separated list of allowed hosts |
+
+## Monitoring
+
+Prometheus is configured to scrape metrics from all services. The auth service exposes a `/metrics` endpoint via `django-prometheus`.
+
+Alerting rules are defined in `infra/monitoring/prometheus/alerts.yml`:
+
+- `ServiceDown` (critical) — fires when a target is down for 5 minutes
+- `HighRequestLatency` (warning) — fires when average latency exceeds 1s for 5 minutes
+- `HighErrorRate` (warning) — fires when 5xx error rate exceeds 5% for 5 minutes
 
 ## Logging
 

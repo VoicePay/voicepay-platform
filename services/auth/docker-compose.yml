@@ -24,5 +24,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  prometheus:
+    container_name: voicepay-prometheus
+    image: prom/prometheus:v2.51.0
+    volumes:
+      - ../../infra/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ../../infra/monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml
+    ports:
+      - "9090:9090"
+
 volumes:
   postgres_data:

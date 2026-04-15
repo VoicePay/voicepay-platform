@@ -1,0 +1,35 @@
+groups:
+  - name: voicepay-alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} is down"
+          description: "{{ $labels.job }} has been down for more than 5 minutes."
+
+      - alert: HighRequestLatency
+        expr: >-
+          rate(django_http_requests_latency_seconds_by_view_method_sum[5m])
+          / rate(django_http_requests_latency_seconds_by_view_method_count[5m])
+          > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request latency on {{ $labels.view }}"
+          description: "Average latency above 1s for 5 minutes."
+
+      - alert: HighErrorRate
+        expr: >-
+          rate(django_http_responses_total_by_status_total{status=~"5.."}[5m])
+          / rate(django_http_responses_total_by_status_total[5m])
+          > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High 5xx error rate"
+          description: "More than 5% of requests returning 5xx for 5 minutes."
