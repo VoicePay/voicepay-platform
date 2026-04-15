@@ -148,5 +148,5 @@ jobs:
         run: |
           terraform destroy \
             -var="github_oidc_provider_arn=${{ secrets.TF_GITHUB_OIDC_PROVIDER_ARN }}" \
-            -var='public_access_cidrs='"$PUBLIC_ACCESS_CIDRS" \
+            -var='public_access_cidrs=[]' \
             -auto-approve
