@@ -96,7 +96,7 @@ variable "ecr_image_tag_mutability" {
 variable "node_instance_types" {
   description = "EC2 instance types for EKS node group"
   type        = list(string)
-  default     = ["t3.medium"]
+  default     = ["t3.small"]
 }
 
 variable "endpoint_public_access" {
@@ -114,7 +114,7 @@ variable "public_access_cidrs" {
 variable "node_desired_size" {
   description = "Desired number of worker nodes"
   type        = number
-  default     = 2
+  default     = 1
 }
 
 variable "node_min_size" {
@@ -126,5 +126,5 @@ variable "node_min_size" {
 variable "node_max_size" {
   description = "Maximum number of worker nodes"
   type        = number
-  default     = 3
+  default     = 2
 }
