@@ -20,6 +20,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", include("django_prometheus.urls")),
     path("", include("voicepay_auth.urls")),
     path(
         "swagger/",
