@@ -55,7 +55,6 @@ jobs:
   docker-push:
     runs-on: ubuntu-latest
     needs: [lint, test, yaml-lint]
-    continue-on-error: true
 
     steps:
       - uses: actions/checkout@v4
@@ -67,10 +66,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
+      - name: Check ECR repository exists
+        id: ecr-check
+        run: |
+          if aws ecr describe-repositories \
+            --repository-names voicepay-auth 2>/dev/null; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "ECR repo not found - skipping push"
+          fi
+
       - name: Login to ECR
+        if: steps.ecr-check.outputs.exists == 'true'
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build, tag, and push image
+        if: steps.ecr-check.outputs.exists == 'true'
         run: |
           IMAGE_URI=${{ secrets.ECR_REGISTRY }}/voicepay-auth
           docker build -t $IMAGE_URI:${{ github.sha }} -t $IMAGE_URI:latest ./services/auth
