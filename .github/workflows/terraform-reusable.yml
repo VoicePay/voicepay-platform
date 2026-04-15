@@ -109,6 +109,7 @@ jobs:
           fi
 
       - name: Terraform Plan
+        if: inputs.destroy == false
         id: plan
         run: |
           terraform plan \
@@ -118,7 +119,7 @@ jobs:
             -no-color 2>&1 | tee plan_output.txt
 
       - name: Post Plan to PR
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && inputs.destroy == false
         uses: actions/github-script@v7
         with:
           script: |
@@ -139,7 +140,7 @@ jobs:
             });
 
       - name: Terraform Apply
-        if: inputs.apply == true
+        if: inputs.apply == true && inputs.destroy == false
         run: |
           terraform apply -auto-approve tfplan
 
