@@ -8,7 +8,7 @@ resource "aws_eks_cluster" "main" {
     subnet_ids              = var.subnet_ids
     endpoint_private_access = true
     endpoint_public_access  = var.endpoint_public_access
-    public_access_cidrs     = var.endpoint_public_access ? var.public_access_cidrs : null
+    public_access_cidrs     = var.endpoint_public_access && length(var.public_access_cidrs) > 0 ? var.public_access_cidrs : null
   }
 
   tags = merge(var.tags, {
