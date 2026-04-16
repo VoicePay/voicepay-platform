@@ -46,6 +46,7 @@ docker-compose up --build
 
 The app will be available at `http://localhost:8000`.
 Prometheus UI will be available at `http://localhost:9090`.
+Grafana will be available at `http://localhost:3000` (login: `admin` / `admin`).
 
 ### Environment Variables
 
