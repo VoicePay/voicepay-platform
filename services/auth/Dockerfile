@@ -20,9 +20,10 @@ COPY . .
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV NEW_RELIC_CONFIG_FILE=newrelic.ini
 
 # Expose port (default Django port)
 EXPOSE 8000
 
 # Run migrations and start server
-CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+CMD ["sh", "-c", "python manage.py migrate && newrelic-admin run-program python manage.py runserver 0.0.0.0:8000"]
