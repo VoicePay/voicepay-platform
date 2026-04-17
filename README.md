@@ -59,6 +59,9 @@ Create a `.env` file in `services/auth/` based on `.env.example`:
 | `DJANGO_SETTINGS_MODULE` | Settings module path |
 | `DATABASE_URL` | PostgreSQL connection string |
 | `ALLOWED_HOSTS` | Comma-separated list of allowed hosts |
+| `NEW_RELIC_LICENSE_KEY` | New Relic license key |
+| `NEW_RELIC_APP_NAME` | New Relic application name |
+| `NEW_RELIC_HOST` | New Relic collector endpoint |
 
 ## Monitoring
 
