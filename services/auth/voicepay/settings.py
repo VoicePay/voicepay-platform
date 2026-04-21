@@ -151,11 +151,17 @@ LOGGING = {
             "static_fields": {"service": "auth"},
         },
     },
+    "filters": {
+        "trace_id": {
+            "()": "voicepay.middleware.TraceIDFilter",
+        },
+    },
     "handlers": {
         "stdout": {
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",
             "formatter": "json",
+            "filters": ["trace_id"],
         },
     },
     "root": {
