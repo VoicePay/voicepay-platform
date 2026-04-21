@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django_prometheus.middleware.PrometheusBeforeMiddleware",
+    "voicepay.middleware.TraceIDMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -145,9 +146,14 @@ LOGGING = {
     "formatters": {
         "json": {
             "()": "pythonjsonlogger.jsonlogger.JsonFormatter",
-            "fmt": "%(asctime)s %(levelname)s %(name)s %(message)s",
+            "fmt": "%(asctime)s %(levelname)s %(name)s %(message)s %(trace_id)s",
             "rename_fields": {"asctime": "timestamp", "levelname": "level"},
             "static_fields": {"service": "auth"},
+        },
+    },
+    "filters": {
+        "trace_id": {
+            "()": "voicepay.middleware.TraceIDFilter",
         },
     },
     "handlers": {
@@ -155,6 +161,7 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",
             "formatter": "json",
+            "filters": ["trace_id"],
         },
     },
     "root": {

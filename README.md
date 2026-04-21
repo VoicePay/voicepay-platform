@@ -81,14 +81,41 @@ All services output structured JSON logs to stdout. Each log entry includes:
 - `level` — severity (INFO, WARNING, ERROR)
 - `message` — description of the event
 - `service` — name of the service emitting the log (e.g. `auth`)
+- `trace_id` — unique request identifier for end-to-end tracing
 
 Logging is configured centrally in `settings.py` and is ready for integration with observability tools like Grafana, Prometheus, and New Relic.
+
+**Request Tracing:**
+
+Every request is assigned a unique trace ID (UUID). The trace ID is:
+- Generated automatically or accepted via `X-Trace-ID` request header
+- Injected into all log entries for the request lifecycle
+- Returned in the `X-Trace-ID` response header for client correlation
+- Thread-safe using Python `ContextVar`
 
 **Example log output:**
 
 ```json
-{"timestamp": "2026-01-01 00:00:00,000", "level": "INFO", "message": "Voice login successful", "service": "auth", "email": "alice@example.com"}
-{"timestamp": "2026-01-01 00:00:00,000", "level": "WARNING", "message": "Voice authentication failed", "service": "auth", "email": "bob@example.com"}
-{"timestamp": "2026-01-01 00:00:00,000", "level": "WARNING", "message": "Login attempted for non-existent user", "service": "auth", "email": "ghost@example.com"}
-{"timestamp": "2026-01-01 00:00:00,000", "level": "WARNING", "message": "User registration attempted without voice sample", "service": "auth"}
+{"timestamp": "2026-01-01 00:00:00,000", "level": "INFO", "message": "Voice login successful", "service": "auth", "trace_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"}
+{"timestamp": "2026-01-01 00:00:00,000", "level": "WARNING", "message": "Voice authentication failed", "service": "auth", "trace_id": "f9e8d7c6-b5a4-3210-fedc-ba9876543210"}
 ```
+
+## Centralized Logging
+
+Logs are collected from all Kubernetes workloads using the Fluent Bit → Loki → Grafana stack:
+
+- **Fluent Bit** — DaemonSet log collector, enriches logs with Kubernetes metadata
+- **Loki** — log aggregation backend with 72h retention and compaction
+- **Grafana** — query and explore logs via Loki datasource
+
+Manifests are in `infra/kubernetes/base/logging/` and managed via ArgoCD.
+
+## GitOps (ArgoCD)
+
+ArgoCD manages workload deployments via Git as the single source of truth:
+
+- Auto-sync enabled with pruning and self-healing
+- Monitors `dev` branch for changes
+- Deploys manifests from `infra/kubernetes/base/`
+
+Setup instructions: [`infra/kubernetes/base/argocd/README.md`](infra/kubernetes/base/argocd/README.md)
