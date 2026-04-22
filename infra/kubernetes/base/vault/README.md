@@ -50,9 +50,31 @@ kubectl exec -n vault vault-0 -- vault write auth/kubernetes/role/voicepay-auth 
   ttl=1h
 ```
 
+## Audit Logging
+
+```bash
+kubectl exec -n vault vault-0 -- vault audit enable file file_path=stdout
+```
+
+Audit logs are sent to stdout, collected by Fluent Bit, and queryable in Grafana via Loki.
+
+## Root Token Revocation
+
+After initial setup, create an admin token and revoke the root token:
+
+```bash
+kubectl exec -n vault vault-0 -- vault policy write admin policies/admin.hcl
+kubectl exec -n vault vault-0 -- vault token create -policy=admin
+kubectl exec -n vault vault-0 -- vault token revoke <ROOT_TOKEN>
+```
+
+Store the admin token securely. Never commit tokens to Git.
+
 ## Architecture
 
 - Vault runs in standalone mode with file storage
 - Kubernetes auth allows pods to authenticate using service account tokens
 - Policies enforce least-privilege access to secrets
+- Audit logging enabled — all secret access logged to stdout → Fluent Bit → Loki
+- Root token revoked after setup — admin token used for operations
 - No secrets stored in Git — all managed through Vault API
