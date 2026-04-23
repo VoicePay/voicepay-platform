@@ -10,8 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import json
 import os
 from pathlib import Path
+
+VAULT_SECRETS_PATH = "/vault/secrets/config"
+
+
+def _load_vault_secrets():
+    if os.path.exists(VAULT_SECRETS_PATH):
+        with open(VAULT_SECRETS_PATH) as f:
+            return json.load(f)
+    return {}
+
+
+_vault = _load_vault_secrets()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +34,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-4!yv&3ut2s0v2gab5$yysdsx8ej8!cexwd@k=knv^+__-8*jrn"
+SECRET_KEY = _vault.get(
+    "django_secret_key",
+    os.getenv("SECRET_KEY", "django-insecure-dev-only-key"),
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() in ("true", "1")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
@@ -90,6 +106,18 @@ DATABASES = {
         "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+if _vault.get("db_password") and _vault.get("db_host"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": _vault.get("db_name", "voicepay"),
+            "USER": _vault.get("db_user", "voicepay"),
+            "PASSWORD": _vault.get("db_password"),
+            "HOST": _vault.get("db_host"),
+            "PORT": _vault.get("db_port", "5432"),
+        }
+    }
 
 
 # Password validation
