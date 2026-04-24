@@ -119,3 +119,20 @@ ArgoCD manages workload deployments via Git as the single source of truth:
 - Deploys manifests from `infra/kubernetes/base/`
 
 Setup instructions: [`infra/kubernetes/base/argocd/README.md`](infra/kubernetes/base/argocd/README.md)
+
+## Secrets Management (Vault)
+
+HashiCorp Vault provides centralized secrets management:
+
+- Deployed via Helm in standalone mode with UI enabled
+- Kubernetes auth enabled — pods authenticate using service account tokens
+- Vault Agent sidecar automatically injects secrets into pods at runtime
+- Least-privilege policies control access per service
+- Audit logging enabled — all secret access logged to stdout → Fluent Bit → Loki
+- Root token revoked after setup
+
+**How it works:**
+
+Pods are annotated with Vault injection annotations. The Vault Agent Injector webhook automatically adds a sidecar container that authenticates to Vault and writes secrets to `/vault/secrets/config`. The application reads this file at startup — no hardcoded credentials, no env var secrets.
+
+Setup instructions: [`infra/kubernetes/base/vault/README.md`](infra/kubernetes/base/vault/README.md)
