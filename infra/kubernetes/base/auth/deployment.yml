@@ -32,8 +32,8 @@ spec:
       serviceAccountName: voicepay-auth
       containers:
         - name: voicepay-auth
-          image: voicepay-auth:latest
-          imagePullPolicy: Never
+          image: 147177189510.dkr.ecr.us-east-1.amazonaws.com/voicepay-auth:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8000
           env:
