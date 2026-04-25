@@ -4,8 +4,9 @@ metadata:
   name: voicepay-auth
   namespace: default
 spec:
+  type: LoadBalancer
   selector:
     app: voicepay-auth
   ports:
-    - port: 8000
+    - port: 80
       targetPort: 8000
