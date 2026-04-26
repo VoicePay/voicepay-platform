@@ -18,15 +18,6 @@ resource "aws_iam_policy" "terraform_state_dev" {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
         Resource = "arn:aws:s3:::voicepay-terraform-state-${var.aws_account_id}"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem"
-        ]
-        Resource = aws_dynamodb_table.terraform_locks.arn
       }
     ]
   })
@@ -58,15 +49,6 @@ resource "aws_iam_policy" "terraform_state_staging" {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
         Resource = "arn:aws:s3:::voicepay-terraform-state-${var.aws_account_id}"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem"
-        ]
-        Resource = aws_dynamodb_table.terraform_locks.arn
       }
     ]
   })
@@ -98,15 +80,6 @@ resource "aws_iam_policy" "terraform_state_prod" {
         Effect   = "Allow"
         Action   = "s3:ListBucket"
         Resource = "arn:aws:s3:::voicepay-terraform-state-${var.aws_account_id}"
-      },
-      {
-        Effect = "Allow"
-        Action = [
-          "dynamodb:GetItem",
-          "dynamodb:PutItem",
-          "dynamodb:DeleteItem"
-        ]
-        Resource = aws_dynamodb_table.terraform_locks.arn
       }
     ]
   })
