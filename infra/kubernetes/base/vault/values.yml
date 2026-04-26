@@ -6,7 +6,7 @@ server:
   dataStorage:
     enabled: true
     size: 1Gi
-    storageClass: gp2
+    storageClass: gp3
   resources:
     requests:
       cpu: 100m
