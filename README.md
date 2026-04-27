@@ -7,6 +7,8 @@ VoicePay is a cloud-native fintech platform that enables secure, voice-driven fi
 voicepay-platform/
 ├── .github/
 │   └── workflows/       # CI/CD GitHub Actions workflows
+├── scripts/             # Automation scripts
+│   └── bootstrap.sh     # One-command platform bootstrap
 ├── services/            # Application microservices
 │   ├── auth/            # Authentication service
 │   ├── notification/    # Notification service
@@ -136,3 +138,25 @@ HashiCorp Vault provides centralized secrets management:
 Pods are annotated with Vault injection annotations. The Vault Agent Injector webhook automatically adds a sidecar container that authenticates to Vault and writes secrets to `/vault/secrets/config`. The application reads this file at startup — no hardcoded credentials, no env var secrets.
 
 Setup instructions: [`infra/kubernetes/base/vault/README.md`](infra/kubernetes/base/vault/README.md)
+
+## Platform Bootstrap
+
+The full platform can be deployed to EKS with two commands:
+
+```bash
+# 1. Provision infrastructure (via GitHub Actions)
+# GitHub → Actions → Terraform → Run workflow → dev → apply
+
+# 2. Bootstrap platform components
+./scripts/bootstrap.sh voicepay-dev us-east-1
+```
+
+The bootstrap script automatically:
+- Connects to the EKS cluster
+- Applies gp3 StorageClass
+- Installs ArgoCD with tuned sync interval (60s)
+- Installs and configures Vault (init, unseal, K8s auth, policies, audit logging)
+- Deploys App of Apps — which auto-deploys monitoring, logging, and auth service
+- Outputs access instructions and credentials
+
+EBS CSI driver and IRSA role are provisioned by Terraform as part of the EKS module.
