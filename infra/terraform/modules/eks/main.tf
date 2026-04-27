@@ -51,7 +51,9 @@ resource "aws_eks_node_group" "main" {
   }
 
   tags = merge(var.tags, {
-    Name = "voicepay-${var.environment}-node-group"
+    Name                                                = "voicepay-${var.environment}-node-group"
+    "k8s.io/cluster-autoscaler/enabled"                 = "true"
+    "k8s.io/cluster-autoscaler/voicepay-${var.environment}" = "owned"
   })
 
   depends_on = [aws_eks_cluster.main]
@@ -94,4 +96,57 @@ resource "aws_eks_addon" "ebs_csi" {
   service_account_role_arn = aws_iam_role.ebs_csi.arn
 
   depends_on = [aws_eks_node_group.main]
+}
+
+# Cluster Autoscaler IRSA Role
+resource "aws_iam_role" "cluster_autoscaler" {
+  name = "voicepay-${var.environment}-cluster-autoscaler-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Federated = aws_iam_openid_connect_provider.eks.arn
+      }
+      Action = "sts:AssumeRoleWithWebIdentity"
+      Condition = {
+        StringEquals = {
+          "${replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}:sub" = "system:serviceaccount:kube-system:cluster-autoscaler"
+          "${replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")}:aud" = "sts.amazonaws.com"
+        }
+      }
+    }]
+  })
+
+  tags = merge(var.tags, {
+    Name = "voicepay-${var.environment}-cluster-autoscaler-role"
+  })
+}
+
+resource "aws_iam_role_policy" "cluster_autoscaler" {
+  name = "voicepay-${var.environment}-cluster-autoscaler"
+  role = aws_iam_role.cluster_autoscaler.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "autoscaling:DescribeAutoScalingGroups",
+          "autoscaling:DescribeAutoScalingInstances",
+          "autoscaling:DescribeLaunchConfigurations",
+          "autoscaling:DescribeScalingActivities",
+          "autoscaling:DescribeTags",
+          "autoscaling:SetDesiredCapacity",
+          "autoscaling:TerminateInstanceInAutoScalingGroup",
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:DescribeInstanceTypes",
+          "eks:DescribeNodegroup"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }

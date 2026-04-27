@@ -27,3 +27,8 @@ output "kubeconfig_command" {
   description = "Command to update kubeconfig for kubectl access"
   value       = "aws eks update-kubeconfig --region ${var.aws_region} --name ${aws_eks_cluster.main.name}"
 }
+
+output "cluster_autoscaler_role_arn" {
+  description = "IAM role ARN for Cluster Autoscaler"
+  value       = aws_iam_role.cluster_autoscaler.arn
+}
