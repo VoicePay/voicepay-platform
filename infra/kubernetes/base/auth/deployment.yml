@@ -12,7 +12,12 @@ metadata:
   labels:
     app: voicepay-auth
 spec:
-  replicas: 1
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   selector:
     matchLabels:
       app: voicepay-auth
@@ -30,6 +35,15 @@ spec:
           {{- end -}}
     spec:
       serviceAccountName: voicepay-auth
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app: voicepay-auth
+                topologyKey: kubernetes.io/hostname
       containers:
         - name: voicepay-auth
           image: 147177189510.dkr.ecr.us-east-1.amazonaws.com/voicepay-auth:latest
