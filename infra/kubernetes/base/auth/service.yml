@@ -3,10 +3,13 @@ kind: Service
 metadata:
   name: voicepay-auth
   namespace: default
+  labels:
+    app: voicepay-auth
 spec:
   type: LoadBalancer
   selector:
     app: voicepay-auth
+    slot: blue
   ports:
     - port: 80
       targetPort: 8000

@@ -160,3 +160,20 @@ The bootstrap script automatically:
 - Outputs access instructions and credentials
 
 EBS CSI driver and IRSA role are provisioned by Terraform as part of the EKS module.
+
+## Blue-Green Deployments
+
+The auth service uses a blue-green deployment strategy for zero-downtime releases:
+
+- **Blue** — active (2 replicas, receiving traffic)
+- **Green** — inactive (0 replicas, standby)
+
+**Deploy a new version:**
+1. Update `deployment-green.yml` — set `replicas: 2` and new image tag
+2. Push to Git → ArgoCD deploys green pods
+3. Verify green is healthy: `kubectl get pods -l slot=green`
+4. Switch `service.yml` selector from `slot: blue` to `slot: green`
+5. Push to Git → traffic switches instantly
+6. Scale down blue: set `replicas: 0` in `deployment-blue.yml`
+
+**Rollback:** Change service selector back to the previous slot. Push to Git. Instant rollback.
