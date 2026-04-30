@@ -37,6 +37,8 @@ echo "Waiting for ArgoCD pods (60s)..."
 sleep 60
 kubectl get pods -n argocd
 kubectl patch configmap argocd-cm -n argocd --type merge -p '{"data":{"timeout.reconciliation":"60s"}}'
+kubectl rollout restart statefulset argocd-application-controller -n argocd
+sleep 15
 
 # Step 4: Install Vault
 echo ""

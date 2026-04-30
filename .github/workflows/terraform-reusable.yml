@@ -159,6 +159,19 @@ jobs:
         run: |
           terraform apply -auto-approve tfplan
 
+      - name: Trigger CI to push Docker image
+        if: inputs.apply == true && inputs.destroy == false
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'ci.yml',
+              ref: 'dev'
+            });
+            console.log('CI workflow triggered to push Docker image to ECR');
+
       - name: Terraform Destroy
         if: inputs.destroy == true
         run: |
