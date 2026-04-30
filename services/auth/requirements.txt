@@ -61,3 +61,4 @@ typing_extensions==4.14.1
 uritemplate==4.2.0
 urllib3==2.5.0
 webrtcvad==2.0.10
+gunicorn==22.0.0

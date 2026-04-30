@@ -27,6 +27,9 @@ spec:
           {{- end -}}
     spec:
       serviceAccountName: voicepay-auth
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

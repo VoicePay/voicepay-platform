@@ -216,3 +216,5 @@ __marimo__/
 .claude/agents/kfc/spec-test.md
 .claude/settings/kfc-settings.json
 .claude/system-prompts/spec-workflow-starter.md
+
+docs/INTERVIEW-PREP.md
