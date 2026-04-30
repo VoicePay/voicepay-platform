@@ -177,3 +177,5 @@ The auth service uses a blue-green deployment strategy for zero-downtime release
 6. Scale down blue: set `replicas: 0` in `deployment-blue.yml`
 
 **Rollback:** Change service selector back to the previous slot. Push to Git. Instant rollback.
+
+For the complete deployment guide including troubleshooting, see [`docs/DEPLOYMENT-RUNBOOK.md`](docs/DEPLOYMENT-RUNBOOK.md).
