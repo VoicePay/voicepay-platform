@@ -47,7 +47,7 @@ spec:
             - name: DJANGO_SETTINGS_MODULE
               value: "voicepay.settings"
             - name: ALLOWED_HOSTS
-              value: "*"
+              value: ".amazonaws.com,.elb.amazonaws.com,localhost,127.0.0.1"
             - name: DEBUG
               value: "false"
             - name: APP_SLOT

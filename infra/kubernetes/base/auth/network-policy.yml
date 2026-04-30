@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: voicepay-auth
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: voicepay-auth
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - ports:
+        - port: 8000
+  egress:
+    - {}
