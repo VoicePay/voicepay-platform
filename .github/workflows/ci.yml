@@ -58,6 +58,7 @@ jobs:
     needs: [lint, test, yaml-lint]
     permissions:
       contents: read
+      actions: write
 
     steps:
       - uses: actions/checkout@v4
