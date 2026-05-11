@@ -50,7 +50,7 @@ jobs:
           - environment: prod
             working_directory: infra/terraform/envs/prod
             auto_apply: false
-    uses: ./.github/workflows/terraform-reusable.yml
+    uses: voicepay/voicepay-platform/.github/workflows/terraform-reusable.yml@dev
     with:
       environment: ${{ matrix.environment }}
       working_directory: ${{ matrix.working_directory }}
